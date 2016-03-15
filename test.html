@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="observer.js"></script>
+</head>
+<body>
+	<button id="button1">button1</button>
+	<button id="button2">button2</button>
+
+
+
+	<script type="text/javascript">
+		// 添加自定义事件
+var fnAlert1, fnAlert2;
+Envents.addEvent("alert", fnAlert1 = function() {
+    alert("第一个弹出！");
+}).addEvent("alert", fnAlert2 = function() {
+    alert("第二个弹出！");
+});
+
+// 按钮绑定事件，用来清除自定义事件
+var elButton1 = document.getElementById("button1"),
+    elButton2 = document.getElementById("button2");
+
+elButton1.onclick = function() {
+    Envents.removeEvent("alert");
+    alert("alert事件清除成功！");
+    
+    // 此时后一个按钮卧底了，故隐藏
+    elButton2.style.display = "none";
+};
+
+elButton2.onclick = function() {
+    Envents.removeEvent("alert", fnAlert1);
+    alert("第一个alert清除成功！");
+};
+
+// 点击文档，触发自定义事件
+document.onclick = function(e) {
+    e = e || window.event;
+    var target = e.target || e.srcElement;
+    
+    // 如果文档点击元素标签名不是input
+    if (!target || !/input|pre/i.test(target.tagName)) {
+        Envents.startEvent("alert");
+    }
+};
+	</script>
+</body>
+</html>
